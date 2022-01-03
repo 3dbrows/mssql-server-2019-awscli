@@ -1,0 +1,21 @@
+name: ci
+
+on:
+  push:
+    branches:
+    - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@master
+    - name: Build and push
+      working-directory: .
+      run: |
+        docker login -u $USER -p $PASS
+        docker build -t 3dbrows/mssql-server-2019-awscli:2019-latest .
+        docker image push 3dbrows/mssql-server-2019-awscli:2019-latest
+      env:
+        USER: ${{ secrets.DOCKER_USER }}
+        PASS: ${{ secrets.DOCKER_PASS }}
